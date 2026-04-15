@@ -1,0 +1,13 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 01-pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-config-pvc
+  namespace: sonarr
+spec:
+  storageClassName: hostpath-sc
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
+

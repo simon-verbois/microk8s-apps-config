@@ -1,0 +1,71 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr-deployment
+  namespace: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      securityContext:
+        fsGroup: 1003
+      containers:
+      - name: app
+        image: lscr.io/linuxserver/sonarr:latest
+        envFrom:
+        - configMapRef:
+            name: sonarr-configmap
+        volumeMounts:
+        - name: sonarr-config
+          mountPath: /config
+        - name: disk1
+          mountPath: /disk1
+        - name: disk2
+          mountPath: /disk2
+        - name: disk3
+          mountPath: /disk3
+        - name: disk4
+          mountPath: /disk4
+        - name: disk5
+          mountPath: /disk5
+        - name: disk6
+          mountPath: /disk6
+
+      volumes:
+      - name: sonarr-config
+        persistentVolumeClaim:
+          claimName: sonarr-config-pvc
+      - name: disk1
+        hostPath:
+          path: /path/to/storage1/
+          type: Directory
+      - name: disk2
+        hostPath:
+          path: /path/to/storage2/
+          type: Directory
+      - name: disk3
+        hostPath:
+          path: /path/to/storage3/
+          type: Directory
+      - name: disk4
+        hostPath:
+          path: /path/to/storage4/
+          type: Directory
+      - name: disk5
+        hostPath:
+          path: /path/to/storage5/
+          type: Directory
+      - name: disk6
+        hostPath:
+          path: /path/to/storage6/
+          type: Directory
