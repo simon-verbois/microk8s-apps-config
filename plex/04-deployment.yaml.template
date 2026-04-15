@@ -1,0 +1,139 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 04-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex-deployment
+  namespace: plex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      runtimeClassName: nvidia
+      hostname: plex
+      containers:
+      - name: app
+        image: plexinc/pms-docker:latest
+        ports:
+        - containerPort: 32400
+          name: plex-web
+          protocol: TCP
+        - containerPort: 3005
+          name: plex-companion
+          protocol: TCP
+        - containerPort: 8324
+          name: plex-relay
+          protocol: TCP
+        - containerPort: 32469
+          name: plex-dlna-tcp
+          protocol: TCP
+        - containerPort: 1900
+          name: plex-dlna-udp
+          protocol: UDP
+        - containerPort: 32410
+          name: gdm-1-udp
+          protocol: UDP
+        - containerPort: 32412
+          name: gdm-2-udp
+          protocol: UDP
+        - containerPort: 32413
+          name: gdm-3-udp
+          protocol: UDP
+        - containerPort: 32414
+          name: gdm-4-udp
+          protocol: UDP
+        livenessProbe:
+          httpGet:
+            path: /identity
+            port: 32400
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /identity
+            port: 32400
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        envFrom:
+        - configMapRef:
+            name: plex-configmap
+        - secretRef:
+            name: plex-secret
+        volumeMounts:
+        - name: plex-config
+          mountPath: /config
+        - name: plex-backup
+          mountPath: /db_backup
+        - name: plex-transcode
+          mountPath: /transcode
+        - name: plex-run
+          mountPath: /run
+        - name: disk1
+          mountPath: /media/disk1
+        - name: disk2
+          mountPath: /media/disk2
+        - name: disk3
+          mountPath: /media/disk3
+        - name: disk4
+          mountPath: /media/disk4
+        - name: disk5
+          mountPath: /media/disk5
+        - name: disk6
+          mountPath: /media/disk6
+        - name: media
+          mountPath: /media/media
+      volumes:
+      - name: plex-config
+        persistentVolumeClaim:
+          claimName: plex-config-pvc
+      - name: plex-transcode
+        persistentVolumeClaim:
+          claimName: plex-transcode-pvc
+      - name: plex-run
+        persistentVolumeClaim:
+          claimName: plex-run-pvc
+      - name: plex-backup
+        persistentVolumeClaim:
+          claimName: plex-backup-pvc
+      - name: disk1
+        hostPath:
+          path: /path/to/storage1
+          type: Directory
+      - name: disk2
+        hostPath:
+          path: /path/to/storage2
+          type: Directory
+      - name: disk3
+        hostPath:
+          path: /path/to/storage3
+          type: Directory
+      - name: disk4
+        hostPath:
+          path: /path/to/storage4
+          type: Directory
+      - name: disk5
+        hostPath:
+          path: /path/to/storage5
+          type: Directory
+      - name: disk6
+        hostPath:
+          path: /path/to/storage6
+          type: Directory
+      - name: media
+        hostPath:
+          path: /path/to/media
+          type: Directory

@@ -1,0 +1,42 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 01-pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-config-pvc
+  namespace: plex
+spec:
+  storageClassName: hostpath-sc
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-backup-pvc
+  namespace: plex
+spec:
+  storageClassName: hostpath-sc
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-transcode-pvc
+  namespace: plex
+spec:
+  storageClassName: hostpath-sc
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-run-pvc
+  namespace: plex
+spec:
+  storageClassName: hostpath-sc
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }

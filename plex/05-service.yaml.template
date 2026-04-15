@@ -1,0 +1,17 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 05-service.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-service
+  namespace: plex
+spec:
+  type: ClusterIP
+  selector:
+    app: plex
+  ports:
+  - name: plex-web
+    protocol: TCP
+    port: 32400
+    targetPort: 32400
