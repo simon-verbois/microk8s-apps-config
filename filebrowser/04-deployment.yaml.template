@@ -1,0 +1,92 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 04-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filebrowser-deployment
+  namespace: filebrowser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filebrowser
+  template:
+    metadata:
+      labels:
+        app: filebrowser
+    spec:
+      securityContext:
+        fsGroup: 1003
+        sysctls:
+          - name: net.ipv4.ip_unprivileged_port_start
+            value: "0"
+      containers:
+      - name: app
+        image: gtstef/filebrowser:latest
+        envFrom:
+        - configMapRef:
+            name: filebrowser-configmap
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: filebrowser-data
+          mountPath: /home/filebrowser/data
+        - name: config-file
+          mountPath: /home/filebrowser/data/config.yaml
+          subPath: config.yaml
+        - name: media
+          mountPath: /home/filebrowser/mnt/media
+        - name: disk1
+          mountPath: /home/filebrowser/mnt/disk1
+        - name: disk2
+          mountPath: /home/filebrowser/mnt/disk2
+        - name: disk3
+          mountPath: /home/filebrowser/mnt/disk3
+        - name: disk4
+          mountPath: /home/filebrowser/mnt/disk4
+        - name: disk5
+          mountPath: /home/filebrowser/mnt/disk5
+        - name: disk6
+          mountPath: /home/filebrowser/mnt/disk6
+          
+      volumes:
+      - name: filebrowser-data
+        persistentVolumeClaim:
+          claimName: filebrowser-data-pvc
+      - name: config-file
+        configMap:
+          name: filebrowser-configmap
+          items:
+            - key: config.yaml
+              path: config.yaml
+      - name: media
+        hostPath:
+          path: /path/to/media
+          type: Directory
+      - name: disk1
+        hostPath:
+          path: /path/to/storage1
+          type: Directory
+      - name: disk2
+        hostPath:
+          path: /path/to/storage2
+          type: Directory
+      - name: disk3
+        hostPath:
+          path: /path/to/storage3
+          type: Directory
+      - name: disk4
+        hostPath:
+          path: /path/to/storage4
+          type: Directory
+      - name: disk5
+        hostPath:
+          path: /path/to/storage5
+          type: Directory
+      - name: disk6
+        hostPath:
+          path: /path/to/storage6
+          type: Directory

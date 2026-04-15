@@ -1,0 +1,133 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebrowser-configmap
+  namespace: filebrowser
+data:
+  FILEBROWSER_CONFIG: "/home/filebrowser/data/config.yaml"
+  TZ: "Europe/Paris"
+
+  config.yaml: |-
+    server:
+      numImageProcessors: 4
+      socket: ""
+      tlsKey: ""
+      tlsCert: ""
+      disablePreviews: false
+      disablePreviewResize: false
+      disableTypeDetectionByHeader: false
+      port: 80
+      baseURL: "/"
+      logging:
+        - levels: ""
+          apiLevels: ""
+          output: "stdout"
+          noColors: false
+          json: false
+          utc: false
+            #debugMedia: false
+      database: "/home/filebrowser/data/database.db"
+      sources:
+        - path: "/home/filebrowser/mnt/media"
+          name: "Media"
+          config:
+            defaultEnabled: true
+        - path: "/home/filebrowser/mnt/disk1"
+          name: "Disk 1"
+          config:
+            defaultEnabled: true
+        - path: "/home/filebrowser/mnt/disk2"
+          name: "Disk 2"
+          config:
+            defaultEnabled: true
+        - path: "/home/filebrowser/mnt/disk3"
+          name: "Disk 3"
+          config:
+            defaultEnabled: true
+        - path: "/home/filebrowser/mnt/disk4"
+          name: "Disk 4"
+          config:
+            defaultEnabled: true
+        - path: "/home/filebrowser/mnt/disk5"
+          name: "Disk 5"
+          config:
+            defaultEnabled: true
+        - path: "/home/filebrowser/mnt/disk6"
+          name: "Disk 6"
+          config:
+            defaultEnabled: true
+      externalUrl: "https://filebrowser.example.com"
+      internalUrl: ""
+      cacheDir: "data/tmp"
+      maxArchiveSize: 50
+
+    auth:
+      methods:
+        password:
+          enabled: true
+          type: password
+          config:
+            password: "CHANGE_ME_WITH_A_FILEBROWSER_LOGIN_PASSWORD"
+      tokenExpirationHours: 2
+      key: ""
+      adminUsername: "admin"
+      adminPassword: "CHANGE_ME_WITH_A_FILEBROWSER_ADMIN_PASSWORD"
+      totpSecret: ""
+
+    frontend:
+      name: "FileBrowser Quantum"
+      disableDefaultLinks: false
+      disableUsedPercentage: false
+      disableNavButtons: false
+
+    userDefaults:
+      editorQuickSave: false
+      hideSidebarFileActions: false
+      disableQuickToggles: false
+      disableSearchOptions: false
+      stickySidebar: true
+      darkMode: true
+      locale: "en"
+      viewMode: "normal"
+      singleClick: false
+      showHidden: false
+      dateFormat: false
+      gallerySize: 3
+      themeColor: "var(--blue)"
+      quickDownload: false
+      disableOnlyOfficeExt: ".txt .csv .html .pdf"
+      disableOfficePreviewExt: ""
+      lockPassword: false
+      disableSettings: false
+      preview:
+        disableHideSidebar: false
+        highQuality: false
+        image: false
+        video: false
+        motionVideoPreview: false
+        office: false
+        popup: false
+        autoplayMedia: false
+      permissions:
+        api: false
+        admin: false
+        modify: true
+        share: true
+        realtime: false
+      loginMethod: "password"
+      disableUpdateNotifications: false
+      deleteWithoutConfirming: false
+      fileLoading:
+        maxConcurrentUpload: 10
+        uploadChunkSizeMb: 10
+
+    integrations:
+      office:
+        url: ""
+        internalUrl: ""
+        secret: ""
+      media:
+        ffmpegPath: ""

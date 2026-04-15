@@ -1,0 +1,58 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 06-ingressroute.yaml
+# This IngressRoute is more secure than the default ingress
+# To use this IngressRoute, please refer to: the Traefik configuration used in your cluster
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: filebrowser-ingressroute
+  namespace: filebrowser
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`filebrowser.example.com`)
+      kind: Rule
+      services:
+        - name: filebrowser-service
+          port: http
+      middlewares:
+        - name: rate-limit
+          namespace: traefik
+        - name: security-headers
+          namespace: traefik
+        - name: geoblock
+          namespace: traefik
+
+  tls:
+    certResolver: ovhresolver
+    domains:
+      - main: "filebrowser.example.com"
+    options:
+      name: tls-profile
+      namespace: traefik
+
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: filebrowser-ingress
+#  namespace: filebrowser
+#  annotations:
+#    traefik.ingress.kubernetes.io/router.tls.certresolver: ovhresolver
+#spec:
+#  rules:
+#  - host: "filebrowser.example.com"
+#    http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: filebrowser-service
+#            port:
+#              name: http
+#  tls:
+#  - hosts:
+#    - "filebrowser.example.com"
