@@ -1,0 +1,22 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 01-pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audiobookshelf-config-pvc
+  namespace: audiobookshelf
+spec:
+  storageClassName: hostpath-sc
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audiobookshelf-data-pvc
+  namespace: audiobookshelf
+spec:
+  storageClassName: hostpath-sc
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }

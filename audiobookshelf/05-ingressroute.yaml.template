@@ -1,0 +1,68 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 05-ingressroute.yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: audiobookshelf-ingressroute
+  namespace: audiobookshelf
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`audiobookshelf.example.com`) && PathPrefix(`/audiobookshelf/socket.io/`)
+      kind: Rule
+      priority: 100
+      services:
+        - name: audiobookshelf-service
+          port: http
+      middlewares:
+        - name: geoblock
+          namespace: traefik
+        - name: security-headers
+          namespace: traefik
+
+    - match: Host(`audiobookshelf.example.com`)
+      kind: Rule
+      priority: 10
+      services:
+        - name: audiobookshelf-service
+          port: http
+      middlewares:
+        - name: geoblock
+          namespace: traefik
+        - name: security-headers
+          namespace: traefik
+        - name: rate-limit
+          namespace: traefik
+
+  tls:
+    certResolver: ovhresolver
+    domains:
+      - main: "audiobookshelf.example.com"
+    options:
+      name: tls-profile
+      namespace: traefik
+
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: audiobookshelf-ingress
+#  namespace: audiobookshelf
+#  annotations:
+#    traefik.ingress.kubernetes.io/router.tls.certresolver: ovhresolver
+#spec:
+#  rules:
+#  - host: "audiobookshelf.example.com"
+#    http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: audiobookshelf-service
+#            port:
+#              name: http
+#  tls:
+#  - hosts:
+#    - "audiobookshelf.example.com"
