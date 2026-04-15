@@ -1,0 +1,154 @@
+# Template: review and replace placeholder values before deployment.
+# Source: nextcloud-values.yaml
+# Default value can be found here
+# https://github.com/nextcloud/helm/blob/main/charts/nextcloud/values.yaml
+
+image:
+  tag: latest
+  pullPolicy: Always
+
+replicaCount: 1
+
+phpClientHttpsFix:
+  enabled: true
+
+ingress:
+  enabled: false
+
+nextcloud:
+  host: "nextcloud.example.com"
+
+  username: admin
+  password: CHANGE_ME_WITH_A_NEXTCLOUD_ADMIN_PASSWORD
+
+  mail:
+    enabled: true
+    fromAddress: noreply
+    domain: example.com
+    smtp:
+      host: 192.168.0.50
+      secure: '' 
+      port: 25
+      authtype: LOGIN 
+      name: ''
+      password: CHANGE_ME_WITH_AN_SMTP_PASSWORD
+
+  defaultConfigs:
+    imaginary.config.php: true
+
+  extraVolumes:
+    - name: hooks-script
+      configMap:
+        name: nextcloud-hooks-script
+        defaultMode: 0755
+    - name: php-opcache-config
+      configMap:
+        name: nextcloud-php-opcache
+
+  extraVolumeMounts:
+    - name: hooks-script
+      mountPath: /docker-entrypoint-hooks.d/post-installation/99-custom-config.sh
+      subPath: 99-custom-config.sh
+    - name: hooks-script
+      mountPath: /docker-entrypoint-hooks.d/post-upgrade/99-custom-config.sh
+      subPath: 99-custom-config.sh
+    - name: php-opcache-config
+      mountPath: /usr/local/etc/php/conf.d/opcache-recommended.ini
+      subPath: opcache.ini
+
+internalDatabase:
+  enabled: false
+
+externalDatabase:
+  enabled: true
+  type: mysql
+  host: nextcloud-mariadb
+  database: nextcloud
+  user: nextcloud
+  password: CHANGE_ME_WITH_A_DATABASE_PASSWORD
+
+mariadb:
+  enabled: true
+  auth:
+    database: nextcloud
+    user: nextcloud
+    password: CHANGE_ME_WITH_A_DATABASE_PASSWORD
+  primary:
+    persistence:
+      enabled: true
+      size: 1Gi
+      storageClass: hostpath-sc
+
+imaginary:
+  enabled: true
+  replicaCount: 1
+  image:
+    tag: latest
+
+redis:
+  enabled: true
+  image:
+    tag: latest
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+  replica:
+    replicaCount: 0
+    persistence:
+      enabled: false
+
+cronjob:
+  enabled: true
+
+persistence:
+  enabled: true
+  storageClass: hostpath-sc
+
+extraManifests:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: nextcloud-hooks-script
+    data:
+      99-custom-config.sh: |
+        echo "🌍 [Hook] Configuration: Region BE and Maintenance..."
+        php /var/www/html/occ config:system:set default_phone_region --value="BE"
+        php /var/www/html/occ config:system:set maintenance_window_start --type=integer --value=1
+
+        echo "🛡️ [Hook] Configuring Trusted Proxies..."
+        php /var/www/html/occ config:system:set trusted_proxies 0 --value="10.0.0.0/8"
+        php /var/www/html/occ config:system:set trusted_proxies 1 --value="172.16.0.0/12"
+        php /var/www/html/occ config:system:set trusted_proxies 2 --value="192.168.0.0/16"
+        php /var/www/html/occ config:system:set trusted_proxies 3 --value="127.0.0.1"
+
+        echo "🗄️ [Hook] Adding missing indices..."
+        php /var/www/html/occ db:add-missing-indices --no-interaction
+
+        echo "📄 [Hook] Repairing MIME types..."
+        php /var/www/html/occ maintenance:repair --include-expensive --no-interaction
+
+        echo "🗑️ [Hook] Removing 'app_api'..."
+        php /var/www/html/occ app:disable app_api || true
+        php /var/www/html/occ app:remove app_api || true
+
+        echo "📝 [Hook] Disable README display..."
+        php /var/www/html/occ config:app:set text workspace_available --value=0
+        
+        echo "⏰ [Hook] Executing Cron immediately..."
+        php /var/www/html/occ background:cron
+        php -f /var/www/html/cron.php
+
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: nextcloud-php-opcache
+    data:
+      opcache.ini: |
+        opcache.enable=1
+        opcache.interned_strings_buffer=16
+        opcache.max_accelerated_files=10000
+        opcache.memory_consumption=128
+        opcache.save_comments=1
+        opcache.revalidate_freq=1
