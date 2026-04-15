@@ -1,0 +1,11 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitea-runner-configmap
+  namespace: gitea-runner
+data:
+  GITEA_INSTANCE_URL: "http://192.168.0.243:80"
+  DOCKER_HOST: "unix:///shared-socket/docker.sock"

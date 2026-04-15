@@ -1,0 +1,71 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 04-deployment.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea-runner-deployment
+  namespace: gitea-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitea-runner
+  template:
+    metadata:
+      labels:
+        app: gitea-runner
+    spec:
+      containers:
+        - name: runner
+          image: gitea/act_runner:latest
+          command: ["sh", "-c", "
+            while [ ! -S /shared-socket/docker.sock ]; do
+              echo 'waiting for docker socket...';
+              sleep 2;
+            done;
+
+            # On installe docker pour avoir le client CLI, 
+            # mais il sera synchronisé avec le daemon ci-dessous
+            apk update && apk add docker bash;
+
+            /sbin/tini -- run.sh
+          "]
+          envFrom:
+          - configMapRef:
+              name: gitea-runner-configmap
+          - secretRef:
+              name: gitea-runner-secret
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: docker-socket
+              mountPath: /shared-socket
+
+        - name: daemon
+          # Passage en version 27 pour supporter les API récentes (1.47+)
+          image: docker:27-dind
+          command:
+            - sh
+            - -c
+            - |
+              # Configuration pour autoriser ton Gitea local
+              echo '{ \"insecure-registries\": [\"192.168.0.243:80\"] }' > /etc/docker/daemon.json
+              exec dockerd \
+                -H unix:///shared-socket/docker.sock \
+                --insecure-registry 192.168.0.243:80 \
+                --tls=false
+          env:
+          - name: DOCKER_HOST
+            value: "unix:///shared-socket/docker.sock"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: docker-socket
+              mountPath: /shared-socket
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: gitea-runner-data-pvc
+        - name: docker-socket
+          emptyDir: {}

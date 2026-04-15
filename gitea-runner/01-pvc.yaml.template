@@ -1,0 +1,12 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 01-pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitea-runner-data-pvc
+  namespace: gitea-runner
+spec:
+  storageClassName: hostpath-sc
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
