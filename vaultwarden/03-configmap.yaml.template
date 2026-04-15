@@ -1,0 +1,18 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vaultwarden-configmap
+  namespace: vaultwarden
+data:
+  SIGNUPS_ALLOWED: "false"
+  SMTP_HOST: "192.168.0.50"
+  SMTP_FROM: "App <noreply@example.com>"
+  SMTP_PORT: "25"
+  SMTP_SECURITY: "off"
+  DOMAIN: "https://vaultwarden.example.com"
+  TZ: "Europe/Paris"
+  PUSH_ENABLED: "true"
+  PUSH_RELAY_BASE_URI: "https://push.bitwarden.eu"

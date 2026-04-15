@@ -1,0 +1,74 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 06-ingressroute.yaml
+# This IngressRoute is more secure than the default ingress
+# To use this IngressRoute, please refer to: the Traefik configuration used in your cluster
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: vaultwarden-ingressroute
+  namespace: vaultwarden
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`vaultwarden.example.com`) && PathPrefix(`/admin`) # We use a new route to only allow /admin to a specific whitelist
+      kind: Rule
+      priority: 100
+      services:
+        - name: vaultwarden-service
+          port: http
+      middlewares:
+        - name: geoblock
+          namespace: traefik
+        - name: whitelist
+          namespace: traefik
+        - name: security-headers
+          namespace: traefik
+        - name: rate-limit
+          namespace: traefik
+    - match: Host(`vaultwarden.example.com`) && PathPrefix(`/`)
+      kind: Rule
+      priority: 1 
+      services:
+        - name: vaultwarden-service
+          port: http
+      middlewares:
+        - name: geoblock
+          namespace: traefik
+        - name: security-headers
+          namespace: traefik
+        - name: rate-limit
+          namespace: traefik
+  tls:
+    certResolver: ovhresolver
+    domains:
+      - main: "vaultwarden.example.com"
+    options:
+      name: tls-profile
+      namespace: traefik
+
+# Basic ingress
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: vault-ingress
+#  namespace: vault
+#  annotations:
+#    traefik.ingress.kubernetes.io/router.tls.certresolver: your-ingress-certresolver-name # <-- Add your TLS resolver name
+#spec:
+#  rules:
+#  - host: "vaultwarden.example.com" # <-- Add you own domain
+#    http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: vault-service
+#            port:
+#              name: http
+#  tls:
+#  - hosts:
+#    - "vaultwarden.example.com" # <-- Add you own domain
