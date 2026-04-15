@@ -1,0 +1,105 @@
+# Template: copy this file to `config.yml` and replace all example values before running Kometa.
+
+libraries:
+  Films:
+    collection_files:
+      - file: config/movies.yml
+      - default: franchise
+        template_variables:
+          file_poster:
+          exclude:
+            - "10" # Star Wars
+            - "Godzilla (MonsterVerse)"
+            - "Aquaman - Saga"
+            - "スタジオジブリ"
+            - "X-Men - Saga"
+            - "Alien - Saga"
+            - "À Noël mon prince viendra - Saga"
+            - "Captain America - Saga"
+            - "Black Panther - Saga"
+            - "Deadpool - Saga"
+            - "Doctor Strange - Saga"
+            - "A Star Wars Story collection"
+            - "Spider-Man (Avengers) - Saga"
+            - "Man of Steel - Saga"
+            - "Iron Man - Saga"
+            - "Suicide Squad - Saga"
+            - "Ant-Man - Saga"
+            - "Avengers - Saga"
+            - "Thor - Saga"
+            - "Wonder Woman - Saga"
+            - "767217" # A Very Country
+            - "Alien vs. Predator - Saga"
+            - "Captain Marvel - Saga"
+            - "Predator - Saga"
+            - "724848" # Shazam
+  Series/Anime:
+    collection_files:
+      - file: config/shows.yml
+
+settings:
+  run_order:
+    - operations
+    - metadata
+    - collections
+    - overlays
+  cache: true
+  cache_expiration: 60
+  asset_directory: config/assets
+  asset_folders: true
+  asset_depth: 0
+  create_asset_folders: false
+  prioritize_assets: false
+  dimensional_asset_rename: false
+  download_url_assets: false
+  show_missing_season_assets: false
+  show_missing_episode_assets: false
+  show_asset_not_needed: true
+  sync_mode: append
+  minimum_items: 2
+  default_collection_order:
+  delete_below_minimum: true
+  delete_not_scheduled: false
+  run_again_delay: 2
+  missing_only_released: false
+  only_filter_missing: false
+  show_unmanaged: true
+  show_unconfigured: true
+  show_filtered: false
+  show_options: true
+  show_missing: false
+  show_missing_assets: false
+  save_report: false
+  tvdb_language: fre
+  ignore_ids:
+  ignore_imdb_ids:
+  item_refresh_delay: 0
+  playlist_sync_to_users: all
+  playlist_exclude_users:
+  playlist_report: false
+  verify_ssl: false
+  custom_repo:
+  overlay_artwork_filetype: jpg
+  overlay_artwork_quality: 100
+  show_unfiltered: false
+
+plex:
+  # Replace with the URL of your Plex server.
+  url: http://plex.example.local:32400
+  # Replace with your Plex token.
+  token: CHANGE_ME_WITH_A_PLEX_TOKEN
+  timeout: 60
+  db_cache: 4096
+  clean_bundles: false
+  empty_trash: false
+  optimize: false
+  verify_ssl: false
+
+tmdb:
+  # Replace with your TMDb API key.
+  apikey: CHANGE_ME_WITH_A_TMDB_API_KEY
+  language: fr
+  cache_expiration: 60
+  region: FR
+  pin:
+  force_refresh:

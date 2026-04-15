@@ -1,0 +1,343 @@
+collections:
+  "Sélection du jour":
+    builder_level: show
+    sync_mode: sync
+    file_poster: config/assets/jour.png
+    collection_order: random
+    plex_search:
+      any:
+        audience_rating.gte: 7
+      limit: 25
+      sort_by: random
+    sort_title: "Ω040_Sélection de Séries et d'Animes du jour"
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Séries les mieux notés sur IMDb":
+    imdb_list: https://www.imdb.com/fr/list/ls008957859/
+    sync_mode: sync
+    file_poster: config/assets/imdb.jpg
+    collection_order: custom
+    sort_title: "Ω040_Séries les mieux notées sur IMDb"
+    summary: "Collection comprenant le top 250 des séries et animes par note du publique
+      sur IMDb."
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Disney Originals":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_disney"
+    file_poster: config/assets-shows/disney.jpg
+    ###streaming-disney###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        network:
+        - Disney Channel
+        - Disney XD
+        - Disney+
+
+  "Prime Video Originals":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_prime"
+    file_poster: config/assets-shows/prime.jpg
+    ###streaming-prime###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        network:
+        - Prime Video
+
+  "HBO Max Originals":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_hbo"
+    file_poster: config/assets-shows/hbo.jpg
+    ###streaming-hbo###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        network:
+        - HBO
+        - HBO Max
+
+  "Apple Originals":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_apple"
+    file_poster: config/assets-shows/apple.jpg
+    ###streaming-apple###
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        network:
+        - Apple TV
+
+  "Netflix Originals":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_netflix"
+    file_poster: config/assets-shows/netflix.jpg
+    ###streaming-netflix###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        network:
+        - Netflix
+
+# Genre
+  "Séries d'Action & Aventure":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω50_Action et Aventure"
+    file_poster: config/assets/action.jpg
+    ###genre1-ActionAventure###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Action
+        - Adventure
+  "Séries Comiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω50_Comédie"
+    file_poster: config/assets/comedie.png
+    ###genre2-Comédie###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Comédie
+  "Séries Familiales":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω50_Familiaux"
+    file_poster: config/assets/familliaux.png
+    ###genre1-Familial###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Familial
+  "Séries Fantastiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Fantastique"
+    file_poster: config/assets/fantastique.png
+    ###genre2-Fantastique###
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Fantastique
+  "Séries de Guerre":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Guerre"
+    file_poster: config/assets/guerre.png
+    ###genre1-Guerre###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Guerre
+  "Séries Historiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Histoire"
+    file_poster: config/assets/histoire.png
+    ###genre2-Histoire###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Histoire
+  "Séries d’Horreur":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Horreur"
+    file_poster: config/assets/horreur.png
+    ###genre1-Horreur###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Horreur
+  "Séries de Mystère":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Mystère"
+    file_poster: config/assets/mystere.png
+    ###genre1-Mystère###
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Mystère
+  "Séries à Suspens":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Thriller"
+    file_poster: config/assets/thriller.jpg
+    ###genre1-Thriller###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Thriller
+  "Séries de Science-Fiction":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Science-Fiction"
+    file_poster: config/assets/sf.jpg
+    ###genre2-Science-Fiction###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Science-Fiction
+  "Séries Romantiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Romance"
+    file_poster: config/assets/romance.jpg
+    ###genre2-Romance###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Romance
+  "Séries Criminelles":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Crime"
+    file_poster: config/assets/crime.jpg
+    ###genre2-Crime###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Crime
+  "Séries Animées":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Animation"
+    file_poster: config/assets/animation.jpg
+    ###genre2-Animation###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Animation
+        - Anime
+  "Séries Dramatiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Drame"
+    file_poster: config/assets/drame.png
+    ###genre1-Drame###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Drame

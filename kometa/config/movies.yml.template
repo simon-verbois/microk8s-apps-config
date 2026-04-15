@@ -1,0 +1,716 @@
+collections:
+# Universe
+  "MonsterVerse":
+    sort_title: "Ω010_MonsterVerse"
+    summary: "Collection dans l'ordre chronologique des films du MonsterVerse."
+    imdb_list:
+    - https://www.imdb.com/fr/list/ls047139893/
+    sync_mode: sync
+    collection_order: custom
+  "Marvel Cinematic Universe":
+    imdb_list: 
+    - https://www.imdb.com/fr/list/ls029032797/
+    sync_mode: sync
+    collection_order: custom
+    file_poster: config/assets/mcu.png
+    sort_title: "Ω010_mcu"
+    summary: "Collection chronologique des films du Marvel Cinematic Universe."
+  "DC Extended Universe":
+    imdb_list: 
+    - https://www.imdb.com/fr/list/ls563425168/
+    sync_mode: sync
+    collection_order: custom
+    file_poster: config/assets/dcu.png
+    sort_title: "Ω010_dcu"
+    summary: "Collection chronologique des films du DC Comics Universe."
+  "X-Men Cinematic Universe":
+    imdb_list: 
+    - https://www.imdb.com/fr/list/ls025008129/
+    sync_mode: sync
+    collection_order: custom
+    file_poster: config/assets/xmen.jpg
+    sort_title: "Ω010_X-Men Cinematic Universe"
+    summary: "Collection chronologique des films du X-Men Universe."
+  "Alien vs Predator Universe":
+    sort_title: "Ω010_Alien vs Predator Universe"
+    summary: "Collection dans l'ordre chronologique des films Alien et Predator."
+    imdb_list: 
+    - https://www.imdb.com/fr/list/ls567847170/
+    sync_mode: sync
+    collection_order: custom
+
+# Saga manuelle
+  "Star Wars - Saga":
+    imdb_list: 
+    - https://www.imdb.com/fr/list/ls072034866/
+    sync_mode: sync
+    collection_order: custom
+    sort_title: "Star Wars - Saga"
+    summary: "Collection chronologique des films Star Wars."
+  "Incassable - Saga":
+    imdb_list: 
+    - https://www.imdb.com/fr/list/ls022101006/
+    sync_mode: sync
+    collection_order: custom
+    sort_title: "Incassable - Saga"
+    summary: "Collection chronologique des films Incassable, Split et Glass."
+
+# Event winners
+  "Lauréats de l'Oscar du Meilleur Film":
+    imdb_search:
+      event.winning: oscar_picture
+      type: movie
+      limit: 100
+    sync_mode: sync
+    file_poster: config/assets/oscar.png
+    collection_order: random
+    sort_title: "Ω020_Lauréats de l'Oscar du Meilleur Film"
+    summary: "Collection des films ayant gagné l'Oscar du meilleur film."
+    visible_home: range(03/01-04/31)
+    visible_shared: range(03/01-04/31)
+    visible_library: true
+
+  "Lauréats du Festival de Cannes":
+    imdb_search:
+      event.winning: cannes
+      type: movie
+      limit: 100
+    sync_mode: sync
+    file_poster: config/assets/oscar.png #cannes.png
+    collection_order: random
+    sort_title: "Ω020_Lauréats Festival de Cannes"
+    summary: "Les films récompensés au prestigieux Festival de Cannes."
+    visible_home: range(05/01-05/30)  # Visible pendant le festival
+    visible_shared: range(05/01-05/30)
+    visible_library: true
+
+  "Lauréats des Golden Globes":
+    imdb_search:
+      event.winning: golden
+      type: movie
+      limit: 100
+    sync_mode: sync
+    file_poster: config/assets/oscar.png #goldenglobes.png
+    collection_order: random
+    sort_title: "Ω020_Lauréats Golden Globes"
+    summary: "Films récompensés par la Hollywood Foreign Press Association."
+    visible_home: range(01/01-01/31)
+    visible_shared: range(01/01-01/31)
+    visible_library: true
+
+# Noel
+  "Films de Noël":
+    sort_title: "Ω020_Films de Noël"
+    summary: "Collection de films de Noël."
+    file_poster: config/assets/noel.png
+    visible_home: range(12/01-12/31)
+    visible_shared: range(12/01-12/31)
+    visible_library: true
+    collection_order: random
+    plex_search:
+      type: movie
+      title:
+      - "Maman, j'ai raté l'avion !"
+      - "Maman, j’ai encore raté l’avion !"
+      - "Last Christmas"
+      - "Noël au palace"
+      - "Destination Noël"
+      - "À Noël mon prince viendra"
+      - "Noël dans tes bras"
+      - "Mister Noël"
+      - "Un Noël rouge comme l'amour"
+      - "Miss Noël"
+      - "Le Noël où tout à changé"
+      - "Un Noël à Ashford"
+      - "Un Noël avec une star"
+      - "Un Noël pour se retrouver encore"
+      - "Noël sur la glace"
+      - "Un Noël pour se retrouver"
+      - "Un Noël à toute épreuve"
+      - "l'étrange Noël de Lauren"
+      - "Noël, cuisine et romance"
+      - "À Noël mon prince viendra 2"
+      - "La Nuit au musée"
+      - "La Nuit au musée 2"
+      - "La Nuit au musée : Le Secret des pharaons"
+      - "Santa"
+      - "christmas"
+      - "noel"
+      - "Noël"
+      - "Stuart Little"
+      - "Stuart Little 2"
+      - "narnia"
+      - "7ème compagnie"
+      - "elfe"
+      sort_by: random
+
+# Studio
+  "Films des Studios Disney/Pixar":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω15_Les Films des Studios Disney/Pixar"
+    file_poster: config/assets/disney.png
+    ###studio-disney###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        studio:
+        - disney
+        - pixar
+        - "Walt Disney Feature Animation"
+  "Films de la Warner Bros":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω15_Les Films de la Warner Bros"
+    file_poster: config/assets/warner.png
+    collection_order: random
+    ###studio-warnerbros###
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        studio:
+        - warner
+  "Films des Studios Universal":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω15_Les Films des Studios Universal"
+    file_poster: config/assets/universal.jpg
+    ###studio-universal###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        studio:
+        - universal
+  "Films des Studios Paramount":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω15_Les Films des Studios Paramount"
+    file_poster: config/assets/paramount.png
+    ###studio-paramount###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        studio:
+        - paramount
+  "Films de Sony Pictures":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω15_Les Films de Sony Pictures"
+    file_poster: config/assets/sony.jpg
+    ###studio-sonypictures###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        studio:
+        - sony
+        - columbia
+  "Films de la 20th Century Studios":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω15_Les Films de la 20th Century Studios"
+    file_poster: config/assets/20century.jpg
+    ###studio-20thcentury###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        studio:
+        - "20th century"
+
+# Basé sur ...
+  "Films basé sur un livre":
+    imdb_list:
+    - https://www.imdb.com/list/ls026212430/
+    - https://www.imdb.com/list/ls009318269/
+    - https://www.imdb.com/list/ls027010992/
+    sync_mode: sync
+    file_poster: config/assets/livre.png
+    collection_order: random
+    sort_title: "Ω030_Basé sur un livre"
+    ###based-book###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+  "Films basé sur une histoire vraie":
+    imdb_list:
+    - https://www.imdb.com/list/ls000266069/
+    - https://www.imdb.com/list/ls022809331/
+    sync_mode: sync
+    file_poster: config/assets/vraie.png
+    collection_order: random
+    sort_title: "Ω030_Basé sur une histoire vraie"
+    ###based-story###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+  "Films basé sur un jeu vidéo":
+    imdb_list:
+    - https://www.imdb.com/list/ls003042118/
+    - https://www.imdb.com/list/ls033032210/
+    sync_mode: sync
+    file_poster: config/assets/jeu.png
+    collection_order: random
+    sort_title: "Ω030_Basé sur un jeu vidéo"
+    ###based-video###
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+  "Films basé sur un comics":
+    imdb_list:
+    - https://www.imdb.com/list/ls004135985/
+    - https://www.imdb.com/list/ls051763323/
+    sync_mode: sync
+    file_poster: config/assets/comics.png
+    collection_order: random
+    sort_title: "Ω030_Basé sur un comics"
+    ###based-comics###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+
+# Top critique
+  "Films les mieux notés sur IMDb":
+    imdb_list: https://www.imdb.com/fr/list/ls068082370/
+    sync_mode: sync
+    file_poster: config/assets/imdb.jpg
+    collection_order: custom
+    sort_title: "Ω040_Films les mieux notés sur IMDb"
+    summary: "Collection comprenant le top 250 des films par note du publique sur
+      IMDb."
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+
+# Selection du jour
+  "Recommandation du jour":
+    builder_level: show
+    sync_mode: sync
+    file_poster: config/assets/jour.png
+    plex_search:
+      any:
+        audience_rating.gte: 7
+      limit: 25
+      sort_by: random
+    collection_order: random
+    sort_title: "Ω040_Recommandation du jour"
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+# Genre
+  "Films d’Action & Aventure":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω50_Films d'Action & Aventure"
+    file_poster: config/assets/action.jpg
+    ###genre1-ActionAventure###
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Action
+        - Adventure
+  "Films Comiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω50_Films Comiques"
+    file_poster: config/assets/comedie.png
+    ###genre2-Comédie###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Comédie
+  "Films Familiaux":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω50_Films Familiaux"
+    file_poster: config/assets/familliaux.png
+    ###genre1-Familial###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Familial
+  "Films Fantastiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films Fantastiques"
+    file_poster: config/assets/fantastique.png
+    ###genre2-Fantastique###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Fantastique
+  "Films de Guerre":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films de Guerre"
+    file_poster: config/assets/guerre.png
+    ###genre1-Guerre###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Guerre
+  "Films Historiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films Historiques"
+    file_poster: config/assets/histoire.png
+    ###genre2-Histoire###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Histoire
+  "Films d’Horreur":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films d’Horreur"
+    file_poster: config/assets/horreur.png
+    ###genre1-Horreur###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Horreur
+  "Films Musicaux":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films Musicaux"
+    file_poster: config/assets/musical.jpg
+    ###genre2-Musical###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Musical
+        - Musique
+  "Films de Mystère":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films de Mystère"
+    file_poster: config/assets/mystere.png
+    ###genre1-Mystère###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Mystère
+  "Films de Western":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films de Western"
+    file_poster: config/assets/western.jpg
+    ###genre2-Western###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Western
+  "Films à Suspens":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films à Suspens"
+    file_poster: config/assets/thriller.jpg
+    ###genre1-Thriller###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Thriller
+  "Films de Science-Fiction":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films de Science-Fiction"
+    file_poster: config/assets/sf.jpg
+    ###genre2-Science-Fiction###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Science-Fiction
+  "Films Romantiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films Romantiques"
+    file_poster: config/assets/romance.jpg
+    ###genre2-Romance###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Romance
+  "Films Criminels":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films Criminels"
+    file_poster: config/assets/crime.jpg
+    ###genre2-Crime###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Crime
+  "Films Biographiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films Biographiques"
+    file_poster: config/assets/biographie.png
+    ###genre1-Biographie###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Biography
+  "Films d’Animation":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films d’Animation"
+    file_poster: config/assets/animation.jpg
+    ###genre2-Animation###
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Animation
+        - Anime
+  "Films Dramatiques":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω050_Films Dramatiques"
+    file_poster: config/assets/drame.png
+    ###genre1-Drame###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        genre:
+        - Drame
+  "Films des années 60":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_1960"
+    file_poster: config/assets/1960.jpg
+    ###decade-1960###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        decade:
+        - 1960
+  "Films des années 70":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_1970"
+    file_poster: config/assets/1970.jpg
+    ###decade-1970###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        decade:
+        - 1970
+  "Films des années 80":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_1980"
+    file_poster: config/assets/1980.jpg
+    ###decade-1980###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        decade:
+        - 1980
+  "Films des années 90":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_1990"
+    file_poster: config/assets/1990.jpg
+    ###decade-1990###
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        decade:
+        - 1990
+  "Films des années 2000":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_2000"
+    file_poster: config/assets/2000.jpg
+    ###decade-2000###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        decade:
+        - 2000
+  "Films des années 2010":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_2010"
+    file_poster: config/assets/2010.jpg
+    ###decade-2010###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        decade:
+        - 2010
+  "Films des années 2020":
+    builder_level: show
+    sync_mode: sync
+    sort_title: "Ω060_2020"
+    file_poster: config/assets/2020.jpg
+    ###decade-2020###
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    collection_order: random
+    plex_search:
+      sort_by: random
+      limit: 50
+      any:
+        decade:
+        - 2020

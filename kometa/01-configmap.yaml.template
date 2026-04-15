@@ -1,0 +1,17 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 01-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kometa-configmap
+  namespace: kometa
+data:
+  PUID: "1003"
+  PGID: "1003"
+  TZ: "Europe/Paris"
+  KOMETA_CONFIG: "/config/config.yml"
+  KOMETA_NO_MISSING: "False"
+  KOMETA_TIME: "02:35"
+  KOMETA_RUN: "False"
+  KOMETA_TEST: "False"

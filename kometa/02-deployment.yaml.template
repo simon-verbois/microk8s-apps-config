@@ -1,0 +1,36 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 02-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kometa-deployment
+  namespace: kometa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kometa
+  template:
+    metadata:
+      labels:
+        app: kometa
+    spec:
+      securityContext:
+        fsGroup: 1003
+      containers:
+      - name: app
+        image: kometateam/kometa:latest
+        envFrom:
+        - configMapRef:
+            name: kometa-configmap
+        volumeMounts:
+        - name: config-dir
+          mountPath: /config
+
+      volumes:
+      - name: config-dir
+        hostPath:
+          path: /path/to/microk8s-apps-config/kometa/config
+          type: Directory
