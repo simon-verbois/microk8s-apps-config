@@ -1,0 +1,17 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 02-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitea-configmap
+  namespace: gitea
+data:
+  TZ: "Europe/Paris"
+  USER_UID: "1003"
+  USER_GID: "1003"
+  GITEA__mailer__ENABLED: "true"
+  GITEA__mailer__FROM: "Gitea <noreply@example.com>"
+  GITEA__mailer__PROTOCOL: "smtp"
+  GITEA__mailer__SMTP_ADDR: "192.168.0.50"
+  GITEA__mailer__SMTP_PORT: "25"
