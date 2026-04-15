@@ -1,0 +1,35 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaresolverr-deployment
+  namespace: flaresolverr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flaresolverr
+  template:
+    metadata:
+      labels:
+        app: flaresolverr
+    spec:
+      securityContext:
+        fsGroup: 1003
+      containers:
+      - name: app
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        envFrom:
+        - configMapRef:
+            name: flaresolverr-configmap
+        volumeMounts:
+        - name: flaresolverr-config
+          mountPath: /config
+
+      volumes:
+      - name: flaresolverr-config
+        persistentVolumeClaim:
+          claimName: flaresolverr-config-pvc

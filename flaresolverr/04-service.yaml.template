@@ -1,0 +1,36 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 04-service.yaml
+# First example show how to listen internally
+# Second, how to listen for a Ingress/IngressRoute
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaresolverr-service
+  namespace: flaresolverr
+spec:
+  type: LoadBalancer
+  selector:
+    app: flaresolverr
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8191
+
+
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: flaresolverr-service
+#  namespace: flaresolverr
+#spec:
+#  type: ClusterIP
+#  selector:
+#    app: flaresolverr
+#  ports:
+#  - name: http
+#    protocol: TCP
+#    port: 8191
+#    targetPort: 8191

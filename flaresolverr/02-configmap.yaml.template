@@ -1,0 +1,10 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 02-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flaresolverr-configmap
+  namespace: flaresolverr
+data:
+  TZ: "Europe/Paris"
