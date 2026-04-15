@@ -1,0 +1,90 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eac3-converter
+  namespace: eac3-converter
+  labels:
+    app: eac3-converter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eac3-converter
+  template:
+    metadata:
+      labels:
+        app: eac3-converter
+    spec:
+      containers:
+      - name: eac3-converter
+        image: admin/eac3-converter:latest
+        resources:
+          limits:
+            cpu: "4"
+            memory: "2G"
+          requests:
+            cpu: "1"
+            memory: "512M"
+        livenessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - "src.main"
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 10
+          failureThreshold: 3
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: cache-volume
+          mountPath: /app/cache
+        - name: disk1
+          mountPath: /app/input/disk1
+        - name: disk2
+          mountPath: /app/input/disk2
+        - name: disk3
+          mountPath: /app/input/disk3
+        - name: disk4
+          mountPath: /app/input/disk4
+        - name: disk5
+          mountPath: /app/input/disk5
+        - name: disk6
+          mountPath: /app/input/disk6
+
+      volumes:
+      - name: config-volume
+        configMap:
+          name: eac3-converter-config
+      - name: cache-volume
+        persistentVolumeClaim:
+          claimName: eac3-converter-cache
+      - name: disk1
+        hostPath:
+          path: /path/to/storage1/
+          type: Directory
+      - name: disk2
+        hostPath:
+          path: /path/to/storage2/
+          type: Directory
+      - name: disk3
+        hostPath:
+          path: /path/to/storage3/
+          type: Directory
+      - name: disk4
+        hostPath:
+          path: /path/to/storage4/
+          type: Directory
+      - name: disk5
+        hostPath:
+          path: /path/to/storage5/
+          type: Directory
+      - name: disk6
+        hostPath:
+          path: /path/to/storage6/
+          type: Directory
