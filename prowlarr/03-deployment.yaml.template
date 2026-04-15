@@ -1,0 +1,44 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr-deployment
+  namespace: prowlarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      securityContext:
+        fsGroup: 1003
+      containers:
+      - name: app
+        image: lscr.io/linuxserver/prowlarr:latest
+        envFrom:
+        - configMapRef:
+            name: prowlarr-configmap
+        volumeMounts:
+        - name: prowlarr-config
+          mountPath: /config
+        - name: ygege-config
+          mountPath: /config/Definitions/Custom/ygege.yml
+          subPath: ygege.yml
+
+      volumes:
+      - name: prowlarr-config
+        persistentVolumeClaim:
+          claimName: prowlarr-config-pvc
+      - name: ygege-config
+        configMap:
+          name: prowlarr-configmap
+          items:
+            - key: ygege.yml
+              path: ygege.yml
