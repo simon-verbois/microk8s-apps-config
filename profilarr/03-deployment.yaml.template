@@ -1,0 +1,35 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profilarr-deployment
+  namespace: profilarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: profilarr
+  template:
+    metadata:
+      labels:
+        app: profilarr
+    spec:
+      securityContext:
+        fsGroup: 1003
+      containers:
+      - name: app
+        image: santiagosayshey/profilarr:latest
+        envFrom:
+        - configMapRef:
+            name: profilarr-configmap
+        volumeMounts:
+        - name: profilarr-config
+          mountPath: /config
+
+      volumes:
+      - name: profilarr-config
+        persistentVolumeClaim:
+          claimName: profilarr-config-pvc

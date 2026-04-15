@@ -1,0 +1,12 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 02-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: profilarr-configmap
+  namespace: profilarr
+data:
+  TZ: "Europe/Paris"
+  PUID: "1003"
+  PGID: "1003"
