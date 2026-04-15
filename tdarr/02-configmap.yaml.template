@@ -1,0 +1,14 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 02-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tdarr-configmap
+  namespace: tdarr
+data:
+  TZ: "Europe/Paris"
+  PUID: "1003"
+  PGID: "1003"
+  NVIDIA_DRIVER_CAPABILITIES: "all"
+  NVIDIA_VISIBLE_DEVICES: "all"

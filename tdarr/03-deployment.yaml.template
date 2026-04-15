@@ -1,0 +1,79 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tdarr-deployment
+  namespace: tdarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tdarr
+  template:
+    metadata:
+      labels:
+        app: tdarr
+    spec:
+      runtimeClassName: nvidia
+      securityContext:
+        fsGroup: 1003
+      containers:
+      - name: master
+        image: ghcr.io/haveagitgat/tdarr:latest
+        envFrom:
+        - configMapRef:
+            name: tdarr-configmap
+        volumeMounts:
+        - name: tdarr-config
+          mountPath: /app/configs
+        - name: tdarr-server
+          mountPath: /app/server
+        - name: tdarr-logs
+          mountPath: /app/logs
+        - name: tdarr-cache
+          mountPath: /temp
+        - name: data
+          mountPath: /media
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+      - name: node
+        image: ghcr.io/haveagitgat/tdarr_node:latest
+        envFrom:
+        - configMapRef:
+            name: tdarr-configmap
+        volumeMounts:
+        - name: tdarr-config
+          mountPath: /app/configs
+        - name: tdarr-server
+          mountPath: /app/server
+        - name: tdarr-logs
+          mountPath: /app/logs
+        - name: tdarr-cache
+          mountPath: /temp
+        - name: data
+          mountPath: /media
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+
+      volumes:
+      - name: tdarr-config
+        persistentVolumeClaim:
+          claimName: tdarr-config-pvc
+      - name: tdarr-cache
+        persistentVolumeClaim:
+          claimName: tdarr-cache-pvc
+      - name: tdarr-logs
+        persistentVolumeClaim:
+          claimName: tdarr-logs-pvc
+      - name: tdarr-server
+        persistentVolumeClaim:
+          claimName: tdarr-server-pvc
+      - name: data
+        hostPath:
+          path: /path/to/storage/
+          type: Directory
