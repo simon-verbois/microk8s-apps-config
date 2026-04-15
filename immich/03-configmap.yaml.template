@@ -1,0 +1,18 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-configmap
+  namespace: immich
+data:
+  TZ: "Europe/Paris"
+  PUID: "1003"
+  PGID: "1003"
+  DB_USERNAME: "postgres"
+  DB_DATABASE_NAME: "immich"
+  DB_HOSTNAME: "immich-db"
+  REDIS_HOSTNAME: "immich-redis"
+  NVIDIA_VISIBLE_DEVICES: "all"
+  NVIDIA_DRIVER_CAPABILITIES: "all"

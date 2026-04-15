@@ -1,0 +1,157 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 04-deployment.yaml
+---
+# 1. DATABASE DEPLOYMENT
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-db
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-db
+  template:
+    metadata:
+      labels:
+        app: immich-db
+    spec:
+      containers:
+      - name: db
+        image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
+        env:
+          - name: POSTGRES_USER
+            valueFrom: { configMapKeyRef: { name: immich-configmap, key: DB_USERNAME } }
+          - name: POSTGRES_DB
+            valueFrom: { configMapKeyRef: { name: immich-configmap, key: DB_DATABASE_NAME } }
+          - name: POSTGRES_INITDB_ARGS
+            value: "--data-checksums"
+          - name: POSTGRES_PASSWORD
+            valueFrom: { secretKeyRef: { name: immich-secret, key: DB_PASSWORD } }
+        volumeMounts:
+          - name: immich-db
+            mountPath: /var/lib/postgresql/data
+          - name: dshm
+            mountPath: /dev/shm
+      volumes:
+      - name: immich-db
+        persistentVolumeClaim: { claimName: immich-db-pvc }
+      - name: dshm
+        emptyDir: { medium: Memory, sizeLimit: 128M }
+
+---
+# 2. REDIS DEPLOYMENT
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-redis
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-redis
+  template:
+    metadata:
+      labels:
+        app: immich-redis
+    spec:
+      containers:
+      - name: redis
+        image: docker.io/valkey/valkey:9@sha256:3eeb09785cd61ec8e3be35f8804c8892080f3ca21934d628abc24ee4ed1698f6
+
+---
+# 3. IMMICH SERVER DEPLOYMENT
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-server
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-server
+  template:
+    metadata:
+      labels:
+        app: immich-server
+    spec:
+      runtimeClassName: nvidia
+      # The InitContainer ensures DB and Redis are reachable before the app starts
+      initContainers:
+      - name: wait-for-services
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - |
+          echo "Waiting for immich-db:5432..."
+          until nc -zv immich-db 5432; do sleep 2; done
+          echo "Waiting for immich-redis:6379..."
+          until nc -zv immich-redis 6379; do sleep 2; done
+          echo "All backend services are up. Starting Immich Server..."
+      containers:
+      - name: immich
+        image: ghcr.io/immich-app/immich-server:release
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        envFrom:
+          - configMapRef: { name: immich-configmap }
+          - secretRef: { name: immich-secret }
+        volumeMounts:
+          - name: immich-data
+            mountPath: /data
+          - name: localtime
+            mountPath: /etc/localtime
+      volumes:
+      - name: immich-data
+        persistentVolumeClaim: { claimName: immich-data-pvc }
+      - name: localtime
+        hostPath: { path: /etc/localtime, type: File }
+
+---
+# 4. MACHINE LEARNING DEPLOYMENT
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-machine-learning
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-machine-learning
+  template:
+    metadata:
+      labels:
+        app: immich-machine-learning
+    spec:
+      runtimeClassName: nvidia
+      initContainers:
+      - name: wait-for-services
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - |
+          echo "Waiting for database and redis..."
+          until nc -zv immich-db 5432 && nc -zv immich-redis 6379; do sleep 2; done
+          echo "Backends ready. Starting ML service..."
+      containers:
+      - name: ml
+        image: ghcr.io/immich-app/immich-machine-learning:release-cuda
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        envFrom:
+          - configMapRef: { name: immich-configmap }
+          - secretRef: { name: immich-secret }
+        volumeMounts:
+          - name: immich-machine-learning
+            mountPath: /cache
+      volumes:
+      - name: immich-machine-learning
+        persistentVolumeClaim: { claimName: immich-machine-learning-pvc }
