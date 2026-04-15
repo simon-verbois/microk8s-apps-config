@@ -1,0 +1,42 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: no
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joal-deployment
+  namespace: joal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: joal
+  template:
+    metadata:
+      labels:
+        app: joal
+    spec:
+      securityContext:
+        fsGroup: 1003
+      containers:
+      - name: app
+        image: anthonyraymond/joal:latest
+        args:
+          - "--joal-conf=/data"
+          - "--spring.main.web-environment=true"
+          - "--server.port=8080"
+          - "--joal.ui.path.prefix=joal"
+          - "--joal.ui.secret-token=CHANGE_ME_WITH_A_JOAL_UI_SECRET_TOKEN"
+        envFrom:
+        - configMapRef:
+            name: joal-configmap
+        volumeMounts:
+        - name: joal-config
+          mountPath: /data
+
+      volumes:
+      - name: joal-config
+        hostPath:
+          path: /path/to/microk8s-apps-config/joal/config
+          type: Directory
