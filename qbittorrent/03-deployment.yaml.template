@@ -1,0 +1,41 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: no
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent-deployment
+  namespace: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      securityContext:
+        fsGroup: 1003
+      containers:
+      - name: app
+        image: lscr.io/linuxserver/qbittorrent:5.1.4
+        envFrom:
+        - configMapRef:
+            name: qbittorrent-configmap
+        volumeMounts:
+        - name: qbittorrent-config
+          mountPath: /config
+        - name: disk1
+          mountPath: /disk1
+
+      volumes:
+      - name: qbittorrent-config
+        persistentVolumeClaim:
+          claimName: qbittorrent-config-pvc
+      - name: disk1
+        hostPath:
+          path: /path/to/storage1/
+          type: Directory

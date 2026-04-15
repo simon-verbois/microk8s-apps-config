@@ -1,0 +1,7 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 00-namespace.yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qbittorrent
