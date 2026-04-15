@@ -1,0 +1,73 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: komga-deployment
+  namespace: komga
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: komga
+  template:
+    metadata:
+      labels:
+        app: komga
+    spec:
+      securityContext:
+        runAsUser: 1003 
+        runAsGroup: 1003
+        fsGroup: 1003
+      containers:
+      - name: app
+        image: gotson/komga:latest
+        envFrom:
+        - configMapRef:
+            name: komga-configmap
+        ports:
+        - containerPort: 25600
+          name: http
+        volumeMounts:
+        - name: komga-config
+          mountPath: /config
+        - name: komga-data
+          mountPath: /data
+        - name: mangas
+          mountPath: /manga
+        - name: ebooks
+          mountPath: /ebooks
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http  
+          initialDelaySeconds: 30 
+          periodSeconds: 20 
+          timeoutSeconds: 5 
+          failureThreshold: 3 
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          initialDelaySeconds: 15 
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          
+      volumes:
+      - name: mangas
+        hostPath:
+          path: /path/to/media/mangas
+          type: Directory
+      - name: ebooks
+        hostPath:
+          path: /path/to/media/ebooks
+          type: Directory
+      - name: komga-config
+        persistentVolumeClaim:
+          claimName: komga-config-pvc
+      - name: komga-data
+        persistentVolumeClaim:
+          claimName: komga-data-pvc

@@ -1,0 +1,11 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 02-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: komga-configmap
+  namespace: komga
+data:
+  TZ: "Europe/Paris"
+  JAVA_TOOL_OPTIONS: "-Xmx4g"

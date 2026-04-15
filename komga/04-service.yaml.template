@@ -1,0 +1,15 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 04-service.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: komga-service
+  namespace: komga
+spec:
+  selector:
+    app: komga
+  ports:
+  - name: http
+    port: 25600 
+    targetPort: http 
