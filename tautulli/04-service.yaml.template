@@ -1,0 +1,15 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 04-service.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tautulli-service
+  namespace: tautulli
+spec:
+  selector:
+    app: tautulli
+  ports:
+  - name: http
+    port: 8181
+    targetPort: http 

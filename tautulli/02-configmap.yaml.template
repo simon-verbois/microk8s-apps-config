@@ -1,0 +1,95 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 02-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tautulli-configmap
+  namespace: tautulli
+data:
+  TZ: "Europe/Paris"
+  PUID: "1003"
+  PGID: "1003"
+  qbittorent-limiter.sh: |-
+    #!/bin/bash
+
+    # --- Configuration ---
+    QBIT_URL="http://192.168.0.245:80"
+    QBIT_USER="admin"
+    QBIT_PASS="CHANGE_ME_WITH_A_QBITTORRENT_PASSWORD"
+    TAUTULLI_URL="http://localhost:8181"
+    TAUTULLI_API_KEY="CHANGE_ME_WITH_A_TAUTULLI_API_KEY"
+    COOKIE_FILE="/tmp/qbit_cookie.txt"
+
+    log() {
+        echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >&2
+    }
+
+    login_qbit() {
+        log "Authenticating with qBittorrent API..."
+        rm -f "$COOKIE_FILE"
+
+        FULL_RESPONSE=$(curl -s -i -X POST \
+            --data-urlencode "username=$QBIT_USER" \
+            --data-urlencode "password=$QBIT_PASS" \
+            "$QBIT_URL/api/v2/auth/login")
+
+        HTTP_STATUS=$(echo "$FULL_RESPONSE" | head -n 1 | awk '{print $2}')
+
+        if [ "$HTTP_STATUS" == "200" ]; then
+            echo "$FULL_RESPONSE" | grep -i "set-cookie:" | cut -d ' ' -f 2 | cut -d ';' -f 1 > "$COOKIE_FILE"
+            log "Login successful. Cookie stored."
+        else
+            log "ERROR: Login failed. HTTP Status: $HTTP_STATUS"
+            exit 1
+        fi
+    }
+
+    set_speed_limits() {
+        local dl_limit=$1
+        local ul_limit=$2
+        local SID=$(cat "$COOKIE_FILE")
+
+        log "Applying limits - Download: $dl_limit bytes/s, Upload: $ul_limit bytes/s"
+
+        curl -s -X POST \
+            --header "Cookie: $SID" \
+            --data "limit=$dl_limit" \
+            "$QBIT_URL/api/v2/transfer/setDownloadLimit"
+
+        curl -s -X POST \
+            --header "Cookie: $SID" \
+            --data "limit=$ul_limit" \
+            "$QBIT_URL/api/v2/transfer/setUploadLimit"
+    }
+
+    check_remote_sessions() {
+        log "Checking active remote sessions on Tautulli..."
+        local activity=$(curl -s "$TAUTULLI_URL/api/v2?apikey=$TAUTULLI_API_KEY&cmd=get_activity")
+        local remote_count=$(echo "$activity" | jq '[.response.data.sessions[] | select(.location == "remote" or .location == "wan")] | length')
+        echo "$remote_count"
+    }
+
+    ACTION=$1
+
+    case "$ACTION" in
+        "start")
+            log "Action triggered: Playback started."
+            login_qbit
+            set_speed_limits 1024 1024
+            ;;
+        "stop")
+            log "Action triggered: Playback stopped."
+            REMOTE_STREAMS=$(check_remote_sessions)
+            log "Active remote sessions found: $REMOTE_STREAMS"
+            if [ "$REMOTE_STREAMS" -eq 0 ]; then
+                log "No more remote streams. Applying standard limits."
+                login_qbit
+                set_speed_limits 6000000 512000
+            else
+                log "Remote streams still active ($REMOTE_STREAMS). Keeping throttle."
+            fi
+            ;;
+        *)
+            log "ERROR: Unknown action '$ACTION'. Use 'start' or 'stop'."
+            ;;
+    esac
