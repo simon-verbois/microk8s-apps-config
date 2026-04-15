@@ -1,0 +1,12 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 01-pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: be-energy-monitor-data
+  namespace: be-energy-monitor
+spec:
+  storageClassName: hostpath-sc # Adjust according to your cluster
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
