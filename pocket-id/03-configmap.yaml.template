@@ -1,0 +1,13 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pocket-id-configmap
+  namespace: pocket-id
+data:
+  APP_URL: "https://pocket-id.example.com"
+  TRUST_PROXY: "false"
+  PUID: "1000"
+  PGID: "1000"

@@ -1,0 +1,34 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 05-service.yaml
+# First example show how to listen internally
+# Second, how to listen for a Ingress/IngressRoute
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pocket-id-service
+  namespace: pocket-id
+spec:
+  type: LoadBalancer
+  selector:
+    app: pocket-id
+  ports:
+  - name: http
+    protocol: TCP
+    port: 1411
+    targetPort: http
+
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: pocket-id-service
+#  namespace: pocket-id
+#spec:
+#  selector:
+#    app: pocket-id
+#  ports:
+#  - name: http
+#    protocol: TCP
+#    port: 1411
+#    targetPort: http
