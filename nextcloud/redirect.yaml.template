@@ -1,0 +1,91 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-note-to-nextcloud-notes
+  namespace: nextcloud
+spec:
+  redirectRegex:
+    regex: "^https?://note\\.example\\.org/?$"
+    replacement: "https://cloud.example.org/apps/notes"
+    permanent: true
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-cookbook-to-nextcloud-cookbook
+  namespace: nextcloud
+spec:
+  redirectRegex:
+    regex: "^https?://cookbook\\.example\\.org/?$"
+    replacement: "https://cloud.example.org/apps/cookbook/"
+    permanent: true
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: note-ingressroute
+  namespace: nextcloud
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`note.example.org`)
+      kind: Rule
+      middlewares:
+        - name: redirect-note-to-nextcloud-notes
+        - name: geoblock
+          namespace: traefik
+        - name: compress
+          namespace: traefik
+        - name: security-headers
+          namespace: traefik
+        - name: rate-limit
+          namespace: traefik
+      services:
+        - name: nextcloud
+          port: 8080
+          passHostHeader: true
+  tls:
+    certResolver: ovhresolver
+    domains:
+      - main: "note.example.org"
+    options:
+      name: tls-profile
+      namespace: traefik
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: cookbook-ingressroute
+  namespace: nextcloud
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`cookbook.example.org`)
+      kind: Rule
+      middlewares:
+        - name: redirect-cookbook-to-nextcloud-cookbook
+        - name: geoblock
+          namespace: traefik
+        - name: compress
+          namespace: traefik
+        - name: security-headers
+          namespace: traefik
+        - name: rate-limit
+          namespace: traefik
+      services:
+        - name: nextcloud
+          port: 8080
+          passHostHeader: true
+  tls:
+    certResolver: ovhresolver
+    domains:
+      - main: "cookbook.example.org"
+    options:
+      name: tls-profile
+      namespace: traefik
