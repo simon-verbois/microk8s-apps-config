@@ -9,19 +9,8 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`audiobookshelf.example.com`) && PathPrefix(`/audiobookshelf/socket.io/`)
-      kind: Rule
-      priority: 100
-      services:
-        - name: audiobookshelf-service
-          port: http
-      middlewares:
-        - name: public-secure-chain
-          namespace: traefik
-
     - match: Host(`audiobookshelf.example.com`)
       kind: Rule
-      priority: 10
       services:
         - name: audiobookshelf-service
           port: http
