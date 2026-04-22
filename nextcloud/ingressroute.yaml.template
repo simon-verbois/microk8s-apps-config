@@ -19,8 +19,6 @@ spec:
           port: 8080
           passHostHeader: true
       middlewares:
-        - name: compress
-          namespace: traefik
         - name: public-secure-chain
           namespace: traefik
 
