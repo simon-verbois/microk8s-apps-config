@@ -36,13 +36,9 @@ spec:
       kind: Rule
       middlewares:
         - name: redirect-note-to-nextcloud-notes
-        - name: geoblock
-          namespace: traefik
         - name: compress
           namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: rate-limit
+        - name: public-secure-chain
           namespace: traefik
       services:
         - name: nextcloud
@@ -70,13 +66,9 @@ spec:
       kind: Rule
       middlewares:
         - name: redirect-cookbook-to-nextcloud-cookbook
-        - name: geoblock
-          namespace: traefik
         - name: compress
           namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: rate-limit
+        - name: public-secure-chain
           namespace: traefik
       services:
         - name: nextcloud

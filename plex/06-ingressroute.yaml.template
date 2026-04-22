@@ -18,11 +18,7 @@ spec:
         - name: plex-service
           port: 32400
       middlewares:
-        - name: geoblock
-          namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: rate-limit
+        - name: public-secure-chain
           namespace: traefik
 
   tls:

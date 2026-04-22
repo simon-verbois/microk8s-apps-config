@@ -19,13 +19,9 @@ spec:
         - name: vaultwarden-service
           port: http
       middlewares:
-        - name: geoblock
+        - name: public-secure-chain
           namespace: traefik
         - name: whitelist
-          namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: rate-limit
           namespace: traefik
     - match: Host(`vaultwarden.example.com`) && PathPrefix(`/`)
       kind: Rule
@@ -34,11 +30,7 @@ spec:
         - name: vaultwarden-service
           port: http
       middlewares:
-        - name: geoblock
-          namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: rate-limit
+        - name: public-secure-chain
           namespace: traefik
   tls:
     certResolver: ovhresolver

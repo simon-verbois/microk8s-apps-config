@@ -16,11 +16,7 @@ spec:
         - name: gitea-service
           port: http
       middlewares:
-        - name: rate-limit
-          namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: geoblock
+        - name: public-secure-chain
           namespace: traefik
   tls:
     certResolver: ovhresolver

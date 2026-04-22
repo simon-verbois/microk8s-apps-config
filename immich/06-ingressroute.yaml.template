@@ -17,9 +17,7 @@ spec:
         - name: immich-web
           port: http
       middlewares:
-        - name: geoblock
-          namespace: traefik
-        - name: security-headers
+        - name: public-secure-chain
           namespace: traefik
 
     - match: Host(`immich.example.com`)
@@ -28,11 +26,7 @@ spec:
         - name: immich-web
           port: http
       middlewares:
-        - name: rate-limit
-          namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: geoblock
+        - name: public-secure-chain
           namespace: traefik
 
   tls:

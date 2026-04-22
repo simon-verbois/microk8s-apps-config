@@ -16,9 +16,7 @@ spec:
         - name: audiobookshelf-service
           port: http
       middlewares:
-        - name: geoblock
-          namespace: traefik
-        - name: security-headers
+        - name: public-secure-chain
           namespace: traefik
 
     - match: Host(`audiobookshelf.example.com`)
@@ -28,11 +26,7 @@ spec:
         - name: audiobookshelf-service
           port: http
       middlewares:
-        - name: geoblock
-          namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: rate-limit
+        - name: public-secure-chain
           namespace: traefik
 
   tls:

@@ -19,13 +19,9 @@ spec:
           port: 8080
           passHostHeader: true
       middlewares:
-        - name: geoblock
-          namespace: traefik
         - name: compress
           namespace: traefik
-        - name: security-headers
-          namespace: traefik
-        - name: rate-limit
+        - name: public-secure-chain
           namespace: traefik
 
   tls:
