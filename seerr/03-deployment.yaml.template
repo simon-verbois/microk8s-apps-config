@@ -1,0 +1,51 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 03-deployment.yaml
+# AutoUpdate: yes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seerr-deployment
+  namespace: seerr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seerr
+  template:
+    metadata:
+      labels:
+        app: seerr
+    spec:
+      containers:
+      - name: app
+        image: ghcr.io/seerr-team/seerr:latest
+        envFrom:
+        - configMapRef:
+            name: seerr-configmap
+        ports:
+        - containerPort: 5055
+          name: http
+        volumeMounts:
+        - name: seerr-config
+          mountPath: /app/config
+        livenessProbe:
+          httpGet:
+            path: /api/v1/settings/public
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/v1/settings/public
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: seerr-config
+        persistentVolumeClaim:
+          claimName: seerr-config-pvc

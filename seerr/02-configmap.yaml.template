@@ -1,0 +1,12 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 02-configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seerr-configmap
+  namespace: seerr
+data:
+  LOG_LEVEL: "info"
+  TZ: "Europe/Paris"
+  PORT: "5055"

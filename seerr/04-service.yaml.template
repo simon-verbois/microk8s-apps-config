@@ -1,0 +1,34 @@
+# Template: review and replace placeholder values before deployment.
+# Source: 04-service.yaml
+# First example show how to listen internally
+# Second, how to listen for a Ingress/IngressRoute
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seerr-service
+  namespace: seerr
+spec:
+  type: LoadBalancer
+  selector:
+    app: seerr
+  ports:
+  - name: http
+    protocol: TCP
+    port: 5055
+    targetPort: http
+
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: seerr-service
+#  namespace: seerr
+#spec:
+#  selector:
+#    app: seerr
+#  ports:
+#  - name: http
+#    protocol: TCP
+#    port: 5055
+#    targetPort: http
